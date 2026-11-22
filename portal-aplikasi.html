@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Portal Aplikasi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f2f4f8;--ink:#14202e;--mut:#5b6b7d;--card:rgba(255,255,255,.74);--line:rgba(20,32,46,.1);--blob:.3;color-scheme:light dark}
+@media (prefers-color-scheme:dark){:root{--bg:#0d1520;--ink:#eef2f7;--mut:#94a3b5;--card:rgba(255,255,255,.055);--line:rgba(255,255,255,.12);--blob:.4}}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;min-height:100dvh;background:var(--bg);color:var(--ink);font-family:'Bricolage Grotesque',system-ui,-apple-system,'Segoe UI',sans-serif;overflow-x:hidden}
+
+/* latar: tiga bola warna yang melayang pelan, warnanya diambil dari aplikasi */
+.blob{position:fixed;z-index:-1;border-radius:50%;filter:blur(90px);opacity:var(--blob);pointer-events:none;animation:drift 22s ease-in-out infinite alternate}
+.b1{width:46vmax;height:46vmax;left:-12vmax;top:-14vmax;background:#0b5ea8}
+.b2{width:38vmax;height:38vmax;right:-10vmax;top:18vh;background:#b0801f;animation-duration:27s;animation-delay:-8s}
+.b3{width:34vmax;height:34vmax;left:22vw;bottom:-18vmax;background:#1a73e8;animation-duration:31s;animation-delay:-14s}
+@keyframes drift{to{transform:translate3d(6vmax,5vmax,0) scale(1.18)}}
+
+.wrap{max-width:1080px;margin:0 auto;padding:max(30px,env(safe-area-inset-top)) 20px max(56px,env(safe-area-inset-bottom))}
+header{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:22px;animation:rise .8s cubic-bezier(.2,.8,.2,1) both}
+h1{margin:0;font-size:clamp(2.4rem,7vw,4rem);font-weight:700;letter-spacing:-.035em;line-height:1}
+.sub{margin:12px 0 0;color:var(--mut);font-size:1.02rem}
+.search{position:relative;width:min(340px,100%)}
+.search svg{position:absolute;left:15px;top:50%;width:18px;height:18px;translate:0 -50%;stroke:var(--mut);fill:none;stroke-width:2;stroke-linecap:round;pointer-events:none}
+.search input{width:100%;padding:13px 16px 13px 42px;font:inherit;font-size:1rem;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:999px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);outline:none;transition:box-shadow .25s,border-color .25s}
+.search input::placeholder{color:var(--mut)}
+.search input:focus{border-color:var(--ink);box-shadow:0 0 0 4px color-mix(in srgb,var(--ink) 12%,transparent)}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px;margin-top:38px}
+.card{--mx:50%;--my:50%;position:relative;display:flex;flex-direction:column;gap:6px;min-height:206px;padding:22px;border-radius:26px;border:1px solid var(--line);background:var(--card);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);color:inherit;text-decoration:none;overflow:hidden;
+  transition:transform .35s cubic-bezier(.2,.8,.2,1),border-color .3s,box-shadow .35s;animation:rise .75s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i) * 90ms + 220ms);-webkit-tap-highlight-color:transparent}
+.card[hidden]{display:none}
+.card::before{content:"";position:absolute;inset:0;background:radial-gradient(380px circle at var(--mx) var(--my),color-mix(in srgb,var(--c) 30%,transparent),transparent 62%);opacity:0;transition:opacity .35s;pointer-events:none}
+.card>*{position:relative}
+@media (hover:hover){
+  .card:hover{transform:translateY(-6px);border-color:color-mix(in srgb,var(--c) 55%,transparent);box-shadow:0 22px 40px -18px color-mix(in srgb,var(--c) 60%,transparent)}
+  .card:hover::before{opacity:1}
+  .card:hover .ico{transform:rotate(-7deg) scale(1.1)}
+  .card:hover .go-chip{background:var(--c);border-color:var(--c);color:#fff;transform:translateX(3px)}
+}
+.card:active{transform:scale(.975)}
+.card:focus-visible{outline:3px solid var(--c);outline-offset:3px}
+.top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:auto;padding-bottom:22px}
+.ico{display:grid;place-items:center;width:54px;height:54px;border-radius:17px;background:linear-gradient(135deg,var(--c),var(--c2));box-shadow:0 10px 20px -8px var(--c);transition:transform .4s cubic-bezier(.3,1.6,.5,1)}
+.ico svg{width:27px;height:27px;stroke:#fff;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.go-chip{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;border:1px solid var(--line);color:var(--mut);transition:all .3s}
+.go-chip svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.card h2{margin:0;font-size:1.32rem;font-weight:700;letter-spacing:-.015em}
+.card p{margin:0;color:var(--mut);font-size:.95rem;line-height:1.45}
+.tag{align-self:flex-start;margin-top:10px;padding:4px 11px;border-radius:999px;font-size:.8rem;font-weight:600;color:var(--c);background:color-mix(in srgb,var(--c) 13%,transparent)}
+@media (prefers-color-scheme:dark){.tag{color:color-mix(in srgb,var(--c2) 75%,#fff)}}
+
+/* jam digital */
+.clock{display:flex;justify-content:center;align-items:flex-start;gap:clamp(6px,2vw,16px);margin-top:38px;animation:rise .8s cubic-bezier(.2,.8,.2,1) .15s both}
+.seg{position:relative;display:flex;flex-direction:column;align-items:center;padding:clamp(12px,2.4vw,20px) clamp(12px,3vw,30px) 11px;border-radius:clamp(18px,3vw,26px);border:1px solid var(--line);background:var(--card);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);overflow:hidden}
+.digits{display:flex;font-size:clamp(2.3rem,11vw,4.8rem);font-weight:700;letter-spacing:-.02em;line-height:1}
+.digits span{display:inline-block;width:.64em;text-align:center}
+.digits span.tick{animation:roll .38s cubic-bezier(.2,.8,.2,1)}
+@keyframes roll{from{opacity:0;transform:translateY(-38%)}to{opacity:1;transform:none}}
+.seg small{margin-top:8px;color:var(--mut);font-size:.82rem}
+.sep{padding-top:clamp(12px,2.4vw,20px);font-style:normal;font-size:clamp(2.3rem,11vw,4.8rem);font-weight:700;line-height:1;color:var(--mut);animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:.25}}
+.sec .digits{color:#1a73e8}
+@media (prefers-color-scheme:dark){.sec .digits{color:#6aa9ff}}
+.bar{position:absolute;left:0;bottom:0;width:100%;height:3px;background:#1a73e8;transform-origin:left;transform:scaleX(0);transition:transform .95s linear}
+@media (prefers-color-scheme:dark){.bar{background:#6aa9ff}}
+
+.empty{margin:48px 0 0;text-align:center;color:var(--mut)}
+.count{color:var(--mut);font-size:.9rem;margin-top:18px}
+
+/* animasi saat aplikasi dibuka: kartu melebar memenuhi layar dengan warna aplikasinya */
+.veil{position:fixed;z-index:50;visibility:hidden;display:grid;place-items:center;overflow:hidden;color:#fff;background:linear-gradient(135deg,var(--c),var(--c2));pointer-events:none}
+.veil.on{visibility:visible;pointer-events:auto}
+.veil.go{transition:top .62s cubic-bezier(.76,0,.24,1),left .62s cubic-bezier(.76,0,.24,1),width .62s cubic-bezier(.76,0,.24,1),height .62s cubic-bezier(.76,0,.24,1),border-radius .62s cubic-bezier(.76,0,.24,1)}
+.lab{display:flex;flex-direction:column;align-items:center;gap:16px;opacity:0;transform:translateY(12px) scale(.9);text-align:center;padding:0 24px}
+.veil.go .lab{opacity:1;transform:none;transition:opacity .4s .3s,transform .5s .3s cubic-bezier(.2,.8,.2,1)}
+.lab .ico{background:rgba(255,255,255,.2);box-shadow:none;width:72px;height:72px;border-radius:22px}
+.lab .ico svg{width:36px;height:36px}
+.lab b{font-size:1.35rem;font-weight:600}
+.dots i{display:inline-block;width:7px;height:7px;margin:0 3px;border-radius:50%;background:#fff;animation:bump .9s ease-in-out infinite}
+.dots i:nth-child(2){animation-delay:.15s}.dots i:nth-child(3){animation-delay:.3s}
+@keyframes bump{0%,100%{opacity:.35;transform:translateY(0)}50%{opacity:1;transform:translateY(-5px)}}
+
+.toast{position:fixed;left:50%;bottom:max(24px,env(safe-area-inset-bottom));z-index:60;max-width:calc(100% - 32px);padding:12px 18px;border-radius:16px;background:var(--ink);color:var(--bg);font-size:.92rem;text-align:center;translate:-50% 30px;opacity:0;pointer-events:none;transition:all .35s cubic-bezier(.2,.8,.2,1)}
+.toast.show{translate:-50% 0;opacity:1}
+
+@keyframes rise{from{opacity:0;transform:translateY(26px) scale(.97)}to{opacity:1;transform:none}}
+@media (max-width:560px){.grid{grid-template-columns:1fr;gap:14px;margin-top:28px}.card{min-height:178px;padding:20px}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+
+<main class="wrap">
+  <header>
+    <div>
+      <h1 id="salam">Halo.</h1>
+      <p class="sub" id="tanggal"></p>
+    </div>
+    <label class="search">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q" type="search" placeholder="Cari aplikasi" autocomplete="off" aria-label="Cari aplikasi">
+    </label>
+  </header>
+
+  <section class="clock" id="clock" role="timer" aria-label="Jam digital">
+    <div class="seg"><div class="digits"><span></span><span></span></div><small>jam</small></div>
+    <i class="sep">:</i>
+    <div class="seg"><div class="digits"><span></span><span></span></div><small>menit</small></div>
+    <i class="sep">:</i>
+    <div class="seg sec"><div class="digits"><span></span><span></span></div><small>detik</small><b class="bar" id="bar"></b></div>
+  </section>
+
+
+  <div class="count" id="count" aria-live="polite"></div>
+  <section class="grid" id="grid" aria-label="Daftar aplikasi"></section>
+  <p class="empty" id="empty" hidden></p>
+</main>
+
+<div class="veil" id="veil" aria-hidden="true">
+  <div class="lab"><div class="ico" id="vIco"></div><b id="vNama"></b><div class="dots"><i></i><i></i><i></i></div></div>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+/* ============================================================
+   DAFTAR APLIKASI — ubah di sini saja.
+   url   : ganti tulisan <<< TEMPEL URL DISINI >>> dengan link web app (Apps Script /exec atau alamat lain), tetap di dalam tanda kutip ' '
+   c, c2 : dua warna kartu (gradasi ikon dan cahaya)
+   ikon  : bolt | car | gem | grid
+   Menambah aplikasi = menyalin satu baris { ... } lalu mengubah isinya.
+   ============================================================ */
+const APPS = [
+  { nama:'Catat Token PLN',  desk:'Catat token listrik, PDAM, dan WiFi tiap bulan.', tag:'Tagihan',  url:'https://pencatatan-transaksi.vercel.app/', c:'#0b5ea8', c2:'#f6c200', ikon:'bolt' },
+  { nama:'Enzy_Gempa Pro',   desk:'Kelola data kendaraan dan pengingatnya.',        tag:'Kendaraan', url:'https://kendaraan-agung-pro.vercel.app/', c:'#1a73e8', c2:'#5fb3ff', ikon:'car'  },
+  { nama:'Aset Perhiasan',   desk:'Simpan data aset perhiasan lengkap dengan foto surat.', tag:'Aset', url:'https://aset-agung.vercel.app/', c:'#b0801f', c2:'#e9c46a', ikon:'gem'  }
+];
+
+const IKON = {
+  bolt:'<path d="M13 2 4 14h6l-1 8 9-12h-6z"/>',
+  car:'<path d="M4 17v-4l2-5h12l2 5v4M4 13h16M7 17v2.5M17 17v2.5"/><circle cx="8" cy="14.8" r=".6"/><circle cx="16" cy="14.8" r=".6"/>',
+  gem:'<path d="M6 3h12l4 6-10 12L2 9z"/><path d="M2 9h20M9 9l3 12 3-12M9 9l-3-6M15 9l3-6"/>',
+  grid:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>'
+};
+const svg = k => `<svg viewBox="0 0 24 24" aria-hidden="true">${IKON[k] || IKON.grid}</svg>`;
+const $ = id => document.getElementById(id);
+const grid = $('grid'), veil = $('veil'), toastEl = $('toast');
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const valid = u => /^https?:\/\//i.test(u);
+
+/* sapaan dan tanggal, diperbarui otomatis saat jam berganti */
+let lastH = -1;
+function salam(d) {
+  const h = d.getHours();
+  $('salam').textContent = 'Selamat ' + (h < 11 ? 'pagi' : h < 15 ? 'siang' : h < 18 ? 'sore' : 'malam') + '.';
+  $('tanggal').textContent = d.toLocaleDateString('id-ID', { weekday:'long', day:'numeric', month:'long', year:'numeric' }) + '. Pilih aplikasi yang ingin dibuka.';
+}
+
+/* jam digital: angka yang berubah turun halus, garis bawah detik mengisi satu menit */
+const dg = [...document.querySelectorAll('#clock .digits span')], bar = $('bar');
+function tick() {
+  const d = new Date(), p = n => String(n).padStart(2, '0'), sec = d.getSeconds();
+  const s = p(d.getHours()) + p(d.getMinutes()) + p(sec);
+  dg.forEach((el, i) => {
+    if (el.textContent !== s[i]) { el.textContent = s[i]; el.classList.remove('tick'); void el.offsetWidth; el.classList.add('tick'); }
+  });
+  bar.style.transition = sec === 0 ? 'none' : '';
+  bar.style.transform = 'scaleX(' + (sec + 1) / 60 + ')';
+  if (d.getHours() !== lastH) { lastH = d.getHours(); salam(d); }
+  setTimeout(tick, 1000 - d.getMilliseconds());
+}
+tick();
+
+/* kartu */
+grid.innerHTML = APPS.map((a, i) => `
+  <a class="card" data-i="${i}" href="${valid(a.url) ? a.url : '#'}" target="_top" style="--i:${i};--c:${a.c};--c2:${a.c2}">
+    <div class="top">
+      <div class="ico">${svg(a.ikon)}</div>
+      <span class="go-chip"><svg viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+    </div>
+    <h2>${a.nama}</h2>
+    <p>${a.desk}</p>
+    <span class="tag">${a.tag}</span>
+  </a>`).join('');
+
+/* cahaya mengikuti kursor di dalam kartu */
+grid.addEventListener('pointermove', e => {
+  const el = e.target.closest('.card'); if (!el) return;
+  const r = el.getBoundingClientRect();
+  el.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+  el.style.setProperty('--my', (e.clientY - r.top) + 'px');
+});
+
+/* klik: kartu melebar jadi layar penuh, lalu pindah ke aplikasi */
+grid.addEventListener('click', e => {
+  const el = e.target.closest('.card'); if (!el) return;
+  if (e.metaKey || e.ctrlKey || e.shiftKey || e.button) return;
+  const a = APPS[el.dataset.i];
+  if (!valid(a.url)) { e.preventDefault(); toast('Link aplikasi belum diisi. Cari tulisan TEMPEL URL DISINI di file ini lalu ganti dengan link aplikasi.'); return; }
+  if (reduce) return;
+  e.preventDefault();
+  const r = el.getBoundingClientRect();
+  veil.style.setProperty('--c', a.c); veil.style.setProperty('--c2', a.c2);
+  $('vIco').innerHTML = svg(a.ikon); $('vNama').textContent = 'Membuka ' + a.nama;
+  veil.className = 'veil on';
+  Object.assign(veil.style, { top:r.top+'px', left:r.left+'px', width:r.width+'px', height:r.height+'px', borderRadius:'26px' });
+  void veil.offsetWidth;
+  veil.classList.add('go');
+  Object.assign(veil.style, { top:0, left:0, width:'100vw', height:'100dvh', borderRadius:0 });
+  setTimeout(() => window.open(a.url, '_top'), 700);
+});
+
+/* tombol Kembali di browser: tutup lapisan warna */
+addEventListener('pageshow', () => { veil.className = 'veil'; veil.removeAttribute('style'); });
+
+/* pencarian */
+const q = $('q'), empty = $('empty'), count = $('count');
+function filter() {
+  const t = q.value.trim().toLowerCase(); let n = 0;
+  [...grid.children].forEach(el => {
+    const a = APPS[el.dataset.i];
+    const ok = (a.nama + ' ' + a.desk + ' ' + a.tag).toLowerCase().includes(t);
+    el.hidden = !ok; if (ok) n++;
+  });
+  count.textContent = n + ' aplikasi';
+  empty.hidden = n > 0;
+  empty.textContent = 'Tidak ada aplikasi yang cocok dengan “' + q.value.trim() + '”.';
+}
+q.addEventListener('input', filter); filter();
+addEventListener('keydown', e => { if (e.key === '/' && document.activeElement !== q) { e.preventDefault(); q.focus(); } });
+
+let tt;
+function toast(msg) { toastEl.textContent = msg; toastEl.classList.add('show'); clearTimeout(tt); tt = setTimeout(() => toastEl.classList.remove('show'), 3800); }
+</script>
+</body>
+</html>
