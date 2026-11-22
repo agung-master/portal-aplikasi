@@ -11,7 +11,8 @@
 :root{--bg:#f3f5f9;--surf:#fff;--ink:#0f1b2d;--mut:#5d6d82;--line:#e1e7ef;--acc:#1a73e8;--blob:.16;color-scheme:light dark}
 @media (prefers-color-scheme:dark){:root{--bg:#0b1220;--surf:#121b2c;--ink:#eaf0f8;--mut:#93a3b9;--line:#223049;--acc:#6aa9ff;--blob:.24}}
 *{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
+html{-webkit-text-size-adjust:100%;scrollbar-width:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
 body{margin:0;min-height:100dvh;background:var(--bg);color:var(--ink);font-family:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',sans-serif;overflow-x:clip}
 
 .blob{position:fixed;z-index:-1;border-radius:50%;opacity:var(--blob);pointer-events:none;will-change:transform;animation:drift 26s ease-in-out infinite alternate}
@@ -99,6 +100,22 @@ h1{margin:0;font-size:clamp(1.9rem,5.2vw,3rem);font-weight:800;letter-spacing:-.
 .toast.show{translate:-50% 0;opacity:1}
 
 @keyframes rise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+/* laptop: semua isi muat satu layar dan berada di tengah (ukuran mengikuti tinggi layar) */
+@media (min-width:900px){
+  .wrap{display:flex;flex-direction:column;min-height:100dvh;padding-top:max(20px,3vh);padding-bottom:max(24px,3vh)}
+  .stage{margin-block:auto;padding-top:clamp(12px,3vh,28px)}
+  .hero{margin-top:0}
+  h1{font-size:clamp(1.8rem,5.6vh,2.7rem)}
+  .clock{margin-top:clamp(14px,2.6vh,24px)}
+  .digits,.sep{font-size:clamp(2rem,7.6vh,3.4rem)}
+  .seg{padding:clamp(8px,1.6vh,14px) 22px 8px}
+  .sep{padding-top:clamp(8px,1.6vh,14px)}
+  .bar{margin-top:clamp(18px,3.6vh,34px);padding-top:clamp(14px,2.4vh,20px)}
+  .hint{margin-top:8px}
+  .grid{margin-top:14px;gap:16px}
+  .card{min-height:clamp(150px,19vh,184px);padding:18px}
+  .ctop{padding-bottom:14px}
+}
 @media (max-width:560px){
   .tools{flex-basis:100%}.search{max-width:none}
   .grid{grid-template-columns:1fr;gap:12px}
@@ -116,6 +133,7 @@ h1{margin:0;font-size:clamp(1.9rem,5.2vw,3rem);font-weight:800;letter-spacing:-.
 <main class="wrap">
   <nav class="nav"><span class="mark"><svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></svg></span>Portal Aplikasi</nav>
 
+  <div class="stage">
   <section class="hero">
     <h1 id="salam">Halo.</h1>
     <p class="sub" id="tanggal"></p>
@@ -142,6 +160,7 @@ h1{margin:0;font-size:clamp(1.9rem,5.2vw,3rem);font-weight:800;letter-spacing:-.
 
   <section class="grid" id="grid" aria-label="Daftar aplikasi"></section>
   <p class="empty" id="empty" hidden></p>
+  </div>
 </main>
 
 <div class="veil" id="veil" aria-hidden="true">
